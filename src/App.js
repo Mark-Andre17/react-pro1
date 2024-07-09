@@ -7,20 +7,36 @@ function App() {
 
   useEffect(() => {
     const url = 'https://jsonplaceholder.typicode.com/todos/';
-    fetch(url)
-    .then((resopnse) => {
+
+    // вариант с async await
+    
+    async function getData(url) {
+      const resopnse = await fetch(url);
       if (!resopnse.ok) {
         throw new Error(`HTTP error! status: ${resopnse.status}`);
       }
-      return resopnse.json();
-    })
-    .then((data) => {
+      const data = await resopnse.json();
       setTodos(data);
-    })
-    .catch((error) => {
-      console.error('There has been a problem with your fetch operation:', error);
-    });
+    }
+    getData(url)
+
+    // вариант с промесами
+
+    // fetch(url)
+    // .then((resopnse) => {
+    //   if (!resopnse.ok) {
+    //     throw new Error(`HTTP error! status: ${resopnse.status}`);
+    //   }
+    //   return resopnse.json();
+    // })
+    // .then((data) => {
+    //   setTodos(data);
+    // })
+    // .catch((error) => {
+    //   console.error('There has been a problem with your fetch operation:', error);
+    // });
   }, [])
+
   return (
     <div className="App">
       {todos.map((item) => (
