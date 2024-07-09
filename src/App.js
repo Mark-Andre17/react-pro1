@@ -1,23 +1,36 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { useState, useEffect } from'react';
 
 function App() {
+
+  const [todos, setTodos] = useState([]);
+
+  useEffect(() => {
+    const url = 'https://jsonplaceholder.typicode.com/todos/';
+    fetch(url)
+    .then((resopnse) => {
+      if (!resopnse.ok) {
+        throw new Error(`HTTP error! status: ${resopnse.status}`);
+      }
+      return resopnse.json();
+    })
+    .then((data) => {
+      setTodos(data);
+    })
+    .catch((error) => {
+      console.error('There has been a problem with your fetch operation:', error);
+    });
+  }, [])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {todos.map((item) => (
+          <ul key={item.id}>
+            <li>
+              <p>{item.title}</p>
+              <div>{item.completed === true ? '\u2705' : '\u274C'}</div>
+            </li>
+          </ul>
+        ))}
     </div>
   );
 }
